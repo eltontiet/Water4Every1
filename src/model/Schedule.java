@@ -1,13 +1,18 @@
 package model;
 
+import exceptions.GoToSleepException;
 import exceptions.NoTimeExistsException;
 import exceptions.TimeOverlapException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 import java.time.LocalTime;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 // Represents a schedule
-public class Schedule {
+public class Schedule implements Writable {
     TreeMap<LocalTime,LocalTime> times;
 
     // MODIFIES: this
@@ -19,7 +24,13 @@ public class Schedule {
     // MODIFIES: this
     // EFFECTS: adds time from startHour, startMinute to endHour, endMinute
     //          throws TimeOverlapException if times overlap
-    public void addTime(int startHour, int startMinute, int endHour, int endMinute) throws TimeOverlapException {
+    //          throws GoToSleepException if user should go to sleep (i.e event loops over a day) I'm too lazy
+    public void addTime(int startHour, int startMinute, int endHour, int endMinute) throws TimeOverlapException,
+            GoToSleepException {
+
+        if (endHour < startHour || (endHour == startHour) && (endMinute < startMinute)) {
+            throw new GoToSleepException();
+        }
 
         LocalTime startTime = LocalTime.of(startHour,startMinute);
 
@@ -68,4 +79,31 @@ public class Schedule {
         return times;
     }
 
+    // EFFECTS: returns a JSONObject that stores this object
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("times", timesToJson());
+
+        return jsonObject;
+    }
+
+    // EFFECTS: returns a JSONArray that stores times
+    private JSONArray timesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Map.Entry<LocalTime,LocalTime> e:times.entrySet()) {
+            JSONObject entry = new JSONObject();
+
+            entry.put("startHour", e.getKey().getHour());
+            entry.put("startMinute", e.getKey().getMinute());
+            entry.put("endHour", e.getValue().getHour());
+            entry.put("endMinute", e.getValue().getMinute());
+
+            jsonArray.put(entry);
+        }
+
+        return jsonArray;
+    }
 }

@@ -1,10 +1,13 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.time.LocalTime;
 import java.util.TreeMap;
 
 // Represents a TimeHandler that compares the current time to
-public class TimeHandler {
+public class TimeHandler implements Writable {
     Schedule schedule;
     LocalTime currTime;
     LocalTime nextDrink;
@@ -70,5 +73,21 @@ public class TimeHandler {
     // FOR TESTING PURPOSES
     public void setCurrTime(LocalTime time) {
         currTime = time;
+    }
+
+    // setter
+    public void setNextDrink(LocalTime time) {
+        nextDrink = time;
+    }
+
+    // EFFECTS: returns a JSONObject that stores this object
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObject = new JSONObject();
+        if (nextDrink != null) {
+            jsonObject.put("nextDrinkHour", nextDrink.getHour());
+            jsonObject.put("nextDrinkMinute", nextDrink.getMinute());
+        }
+        return jsonObject;
     }
 }

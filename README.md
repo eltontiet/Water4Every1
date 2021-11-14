@@ -1,6 +1,6 @@
 # WATER4EVERY1
 
-##USER STORIES
+### USER STORIES
 
 - help users keep track of water consumption
 - send notifications to users:
@@ -9,3 +9,6 @@
      - when water bottle is empty
      - during break times
 
+### Libraries:
+
+- [JSON](https://github.com/stleary/JSON-java)

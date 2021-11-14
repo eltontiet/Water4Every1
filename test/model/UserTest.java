@@ -10,7 +10,7 @@ public class UserTest {
 
     @BeforeEach
     public void setup() {
-        user = new User();
+        user = new User("guy");
         user.editBottle(1400);
     }
 
