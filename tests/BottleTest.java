@@ -1,5 +1,3 @@
-package tests;
-
 import model.Bottle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +10,15 @@ public class BottleTest {
     @BeforeEach
     public void setup() {
         bottle = new Bottle(1000);
+    }
+
+    @Test
+    public void emptyBottleSetTest() {
+        bottle = new Bottle();
+        assertEquals(0, bottle.getCapacity());
+        assertEquals(0, bottle.getWaterLevel());
+        bottle.changeCapacity(1200);
+        assertEquals(1200, bottle.getCapacity());
     }
 
     @Test
