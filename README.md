@@ -1,6 +1,6 @@
 # WATER4EVERY1
 
-###USER STORIES
+##USER STORIES
 
 - help users keep track of water consumption
 - send notifications to users:

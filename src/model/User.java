@@ -1,13 +1,24 @@
 package model;
 
 public class User {
+    private String username;
     private int waterDrank;
     private Bottle bottle;
     private Schedule schedule;
 
+
     public User() {
         bottle = new Bottle();
         schedule = new Schedule();
+        username = "";
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getWaterDrank() {
