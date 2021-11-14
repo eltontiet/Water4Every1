@@ -1,8 +1,9 @@
-import model.Bottle;
+package model;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BottleTest {
     Bottle bottle;
@@ -13,7 +14,7 @@ public class BottleTest {
     }
 
     @Test
-    public void emptyBottleSetTest() {
+    public void testEmptyBottleSet() {
         bottle = new Bottle();
         assertEquals(0, bottle.getCapacity());
         assertEquals(0, bottle.getWaterLevel());
@@ -22,26 +23,26 @@ public class BottleTest {
     }
 
     @Test
-    public void changeCapacityTest() {
+    public void testChangeCapacity() {
         bottle.changeCapacity(1500);
         assertEquals(1500, bottle.getCapacity());
     }
 
     @Test
-    public void drinkLittleTest() {
+    public void testDrinkLittle() {
         bottle.drinkWater(200);
         assertEquals(800, bottle.getWaterLevel());
     }
 
     @Test
-    public void drinkLittlesTest() {
+    public void testDrinkLittles() {
         bottle.drinkWater(200);
         bottle.drinkWater(500);
         assertEquals(300, bottle.getWaterLevel());
     }
 
     @Test
-    public void drinkLittleOverflowTest() {
+    public void testDrinkLittleOverflow() {
         bottle.drinkWater(300);
         bottle.drinkWater(500);
         bottle.drinkWater(500);
@@ -49,13 +50,13 @@ public class BottleTest {
     }
 
     @Test
-    public void drinkLotTest() {
+    public void testDrinkLot() {
         bottle.drinkWater(1100);
         assertEquals(900, bottle.getWaterLevel());
     }
 
     @Test
-    public void drinkLotsTest() {
+    public void testDrinkLots() {
         bottle.drinkWater(1100);
         bottle.drinkWater(2300);
         assertEquals(600, bottle.getWaterLevel());
