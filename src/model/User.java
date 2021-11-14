@@ -61,6 +61,10 @@ public class User implements Writable {
         this.waterDrank = waterDrank;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // EFFECTS: returns a JSONObject that stores this object
     @Override
     public JSONObject toJson() {
