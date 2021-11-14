@@ -1,4 +1,74 @@
 package model;
 
+import java.time.LocalTime;
+import java.util.TreeMap;
+
+// Represents a TimeHandler that compares the current time to
 public class TimeHandler {
+    Schedule schedule;
+    LocalTime currTime;
+    LocalTime nextDrink;
+
+    // MODIFIES: this
+    // EFFECTS: initializes schedule and currTime
+    public TimeHandler(Schedule schedule) {
+        this.schedule = schedule;
+        currTime = LocalTime.now();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: updates currTime
+    public void updateCurrTime() {
+        currTime = LocalTime.now();
+    }
+
+    // EFFECTS: returns nextBreak if it has not passed, or schedules the next break to be during the next break,
+    //          or 2 hours in the future if the break would be longer than 2 hours
+    private LocalTime getNextBreak() {
+        TreeMap<LocalTime,LocalTime> times = schedule.getTimes();
+        LocalTime nextTime = times.floorKey(currTime);
+
+        if (nextTime == null) {
+            return currTime.plusHours(2);
+        }
+
+        if (nextTime.isBefore(currTime)) {
+            nextTime = times.ceilingKey(currTime);
+        }
+
+        if (nextTime == null) {
+            return currTime.plusHours(2);
+        }
+
+        while (times.get(nextTime) != null) { // while end time == next start time
+            nextTime = times.get(nextTime);
+        }
+
+        return nextTime;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: updates nextDrink
+    public void updateNextDrink() {
+        nextDrink = getNextBreak();
+    }
+
+    // EFFECTS: returns true if nextDrink has passed. SHOULD CALL updateCurrTime BEFORE
+    public boolean hasPassed() {
+        return currTime.isAfter(nextDrink);
+    }
+
+    // getters
+    public LocalTime getNextDrink() {
+        return nextDrink;
+    }
+
+    public LocalTime getCurrTime() {
+        return currTime;
+    }
+
+    // FOR TESTING PURPOSES
+    public void setCurrTime(LocalTime time) {
+        currTime = time;
+    }
 }
