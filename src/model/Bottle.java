@@ -9,6 +9,12 @@ public class Bottle {
     private int waterLevel;
 
 
+    //EFFECTS: constructs an empty water bottle
+    public Bottle() {
+        capacity = 0;
+        waterLevel = 0;
+    }
+
     //EFFECTS: constructs a full water bottle
     public Bottle(int capacity) {
         this.capacity = capacity;
@@ -23,24 +29,26 @@ public class Bottle {
         return waterLevel;
     }
 
-    //EFFECTS: modifies current water bottle capacity
+    //EFFECTS: modifies current water bottle capacity, assumes bottle is full
     public void changeCapacity(int capacity) {
         this.capacity = capacity;
+        waterLevel = capacity;
+    }
+
+    //EFFECTS: fills water bottle
+    public void fillWater() {
+        this.waterLevel = capacity;
     }
 
     //EFFECTS: changes current water level
     public void drinkWater(int drank) {
         int water = drank%capacity;
 
-        int currentLevel = waterLevel - water;
-
-        if (currentLevel > 0) {
-            waterLevel = currentLevel;
+        if (waterLevel - water > 0) {
+            waterLevel = waterLevel - water;
         } else {
-            currentLevel = water - waterLevel;
-            waterLevel = capacity - currentLevel;
+            waterLevel = capacity - water + waterLevel;
         }
-
     }
 
 }
