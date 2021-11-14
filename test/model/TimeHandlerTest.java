@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.GoToSleepException;
 import exceptions.TimeOverlapException;
 import org.junit.jupiter.api.*;
 
@@ -21,7 +22,7 @@ public class TimeHandlerTest {
             schedule.addTime(12,0,13,0);
             schedule.addTime(14,0,15,0);
             schedule.addTime(15,0,16,30);
-        } catch (TimeOverlapException e) {
+        } catch (TimeOverlapException | GoToSleepException e) {
             e.printStackTrace();
         }
     }
