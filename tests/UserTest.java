@@ -14,19 +14,32 @@ public class UserTest {
     }
 
     @Test
-    public void drinkWater() {
+    public void drinkWaterTest() {
         user.drinkWater(100);
         assertEquals(100, user.getWaterDrank());
     }
 
     @Test
-    public void drinkLotsOfWater() {
+    public void drinkLotsOfWaterTest() {
         user.drinkWater(100);
         user.drinkWater(200);
         user.drinkWater(300);
         user.drinkWater(400);
         user.drinkWater(500);
         assertEquals(1500, user.getWaterDrank());
+    }
+
+    @Test
+    public void setUsernameTest() {
+        user.setUsername("Elton");
+        assertEquals("Elton", user.getUsername());
+    }
+
+    @Test
+    public void changeUserNameTest() {
+        user.setUsername("Elton");
+        user.setUsername("Michelle");
+        assertEquals("Michelle", user.getUsername());
     }
 
 

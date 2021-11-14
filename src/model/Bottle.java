@@ -37,7 +37,7 @@ public class Bottle {
 
     //EFFECTS: fills water bottle
     public void fillWater() {
-        this.waterLevel = capacity;
+        waterLevel = capacity;
     }
 
     //EFFECTS: changes current water level

@@ -15,26 +15,26 @@ public class BottleTest {
     }
 
     @Test
-    public void changeCapacity() {
+    public void changeCapacityTest() {
         bottle.changeCapacity(1500);
         assertEquals(1500, bottle.getCapacity());
     }
 
     @Test
-    public void drinkLittle() {
+    public void drinkLittleTest() {
         bottle.drinkWater(200);
         assertEquals(800, bottle.getWaterLevel());
     }
 
     @Test
-    public void drinkLittles() {
+    public void drinkLittlesTest() {
         bottle.drinkWater(200);
         bottle.drinkWater(500);
         assertEquals(300, bottle.getWaterLevel());
     }
 
     @Test
-    public void drinkLittleOverflow() {
+    public void drinkLittleOverflowTest() {
         bottle.drinkWater(300);
         bottle.drinkWater(500);
         bottle.drinkWater(500);
@@ -42,15 +42,28 @@ public class BottleTest {
     }
 
     @Test
-    public void drinkLot() {
+    public void drinkLotTest() {
         bottle.drinkWater(1100);
         assertEquals(900, bottle.getWaterLevel());
     }
 
     @Test
-    public void drinkLots() {
+    public void drinkLotsTest() {
         bottle.drinkWater(1100);
         bottle.drinkWater(2300);
         assertEquals(600, bottle.getWaterLevel());
+    }
+
+    @Test
+    public void testFill() {
+        bottle.fillWater();
+        assertEquals(bottle.getCapacity(), bottle.getWaterLevel());
+    }
+
+    @Test
+    public void testFillEmpty() {
+        bottle.drinkWater(bottle.getCapacity());
+        bottle.fillWater();
+        assertEquals(bottle.getCapacity(), bottle.getWaterLevel());
     }
 }
