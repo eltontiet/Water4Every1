@@ -31,7 +31,7 @@ public class UserTest {
     }
 
     @Test
-    public void setNameTest() {
+    public void setUsernameTest() {
         user.setName("Elton");
         assertEquals("Elton", user.getName());
     }
@@ -41,6 +41,17 @@ public class UserTest {
         user.setName("Elton");
         user.setName("Michelle");
         assertEquals("Michelle", user.getName());
+    }
+
+    @Test
+    public void testResetWater() {
+        user.drinkWater(100);
+        user.drinkWater(200);
+        user.drinkWater(300);
+        user.drinkWater(400);
+        user.drinkWater(500);
+        user.resetWater();
+        assertEquals(0, user.getWaterDrank());
     }
 
 
