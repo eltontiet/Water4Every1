@@ -54,7 +54,6 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
 
         initializeGraphics();
-        this.user = user;
     }
 
     // EFFECTS: saves application to file
@@ -123,6 +122,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(nextTimePanel);
     }
 
+    //EFFECTS: displays progress panel which contains progress panel of the GUI
     private void displayProgressPanel(){
         progressPanel = new JPanel();
         progressPanel.setLayout(new FlowLayout());
@@ -138,6 +138,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(progressPanel);
     }
 
+    // EFFECTS: displays panel which contains a button for drink
     private void displayDrinkButtonPanel() {
         drinkButtonPanel = new JPanel();
         drinkButtonPanel.setLayout(new GridLayout(1,0));
@@ -152,6 +153,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(drinkButtonPanel);
     }
 
+    // EFFECTS: displays panel which contains button for editing drink and schedule
     private void displayEditServicesPanel() {
         editServicesPanel = new JPanel();
         editServicesPanel.setLayout(new GridLayout(1,0));
@@ -173,7 +175,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(editServicesPanel);
     }
 
-
+    // EFFECTS: buttons
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
