@@ -143,7 +143,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         nextTimePanel.setLocation(0, 60);
         nextTimePanel.setSize(WIDTH, 150);
         nextTimePanel.setPreferredSize(new Dimension(WIDTH, 150));
-        JLabel nextTimeTextLabel = new JLabel("Time to Next:");
+        JLabel nextTimeTextLabel = new JLabel("Time to Next Drink:");
         nextTimeLabel = new JLabel(); //TODO add the time and then uncomment below
         nextTimeTextLabel.setFont(FONT_NORM);
         nextTimeLabel.setFont(FONT_LARGE);
