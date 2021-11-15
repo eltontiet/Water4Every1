@@ -131,10 +131,16 @@ public class DrinkWaterPopup implements ActionListener {
             updateWaterDrankLabel();
             updateAmountInBottleLabel();
 
+            frame.setVisible(false);
+            frame.dispose();
+
         } else if (e.getSource() == drinkBottleButton) {
-            user.drinkWater(user.getBottle().getCapacity());
+            user.drinkWater(user.getBottle().getWaterLevel());
 
             updateWaterDrankLabel();
+
+            frame.setVisible(false);
+            frame.dispose();
         }
     }
 

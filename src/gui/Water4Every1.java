@@ -23,10 +23,10 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private TimeHandler timeHandler;
     private Timer timer;
 
-    private static LocalDate dateOpened;
+    private LocalDate dateOpened;
 
     private static JsonReader reader;
-    private static JsonWriter writer;
+    private JsonWriter writer;
 
     private JLabel nextTimeLabel;
 
@@ -49,6 +49,8 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
         this.user = user;
         this.timeHandler = timeHandler;
+
+        dateOpened = LocalDate.now();
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Taken from https://stackoverflow.com/questions/16372241/run-function-on-jframe-close/16372860
         addWindowListener(new WindowAdapter() {
@@ -77,6 +79,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
         if (timeHandler.hasPassed()) {
             new Notification();
+            timeHandler.updateNextDrink();
         }
 
         if (LocalDate.now().isAfter(dateOpened)) {
@@ -90,6 +93,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
     // EFFECTS: saves application to file
     private void save() {
         try {
+            writer = new JsonWriter("./data/save.json");
             writer.open();
             writer.write(user, timeHandler);
             writer.close();
@@ -130,7 +134,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         userPanel.setLocation(10,0);
         userPanel.setSize(WIDTH,40);
         userPanel.setPreferredSize(new Dimension(WIDTH, 40));
-        JLabel userLabel = new JLabel("Welcome "); //TODO make user name != null exceptions, then add users name to this
+        JLabel userLabel = new JLabel("Welcome " + user.getName()); //TODO make user name != null exceptions, then add users name to this
         userLabel.setFont(FONT_LARGE);
         userPanel.add(userLabel);
         userPanel.setVisible(true);
@@ -223,7 +227,6 @@ public class Water4Every1 extends JFrame implements ActionListener {
     // EFFECTS: loads from save, and opens the app. If save doesn't exist, then open TODO: StartPopup??
     public static void main(String[] args) {
         reader = new JsonReader("./data/save.json");
-        writer = new JsonWriter("./data/save.json");
         User user;
         TimeHandler timeHandler;
         try {
@@ -233,9 +236,6 @@ public class Water4Every1 extends JFrame implements ActionListener {
             if (LocalDate.now().isAfter(reader.readLastDate())) {
                 user.setWaterDrank(0);
             }
-
-            dateOpened = LocalDate.now();
-
 
             new Water4Every1(user, timeHandler);
         } catch (IOException e) {
