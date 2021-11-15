@@ -1,11 +1,15 @@
 package gui;
 
+import model.TimeHandler;
 import model.User;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Water4Every1 extends JFrame implements ActionListener {
 
@@ -14,8 +18,11 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private static final Font FONT_LARGE = new Font(null, Font.PLAIN, 25);
     private static final Font FONT_NORM = new Font(null, Font.PLAIN, 18);
 
+    private User user;
+    private TimeHandler timeHandler;
 
-    public User user;
+    private static JsonReader reader;
+    private static JsonWriter writer;
 
     private JPanel servicesPanel;
     private JPanel userPanel;
@@ -29,15 +36,36 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private JButton editScheduleButton;
 
     // EFFECTS: constructs the Water4Every1 interactive application
-    public Water4Every1(User user){
+    public Water4Every1(User user, TimeHandler timeHandler) {
         super("Water4Every1");
+
+        this.user = user;
+        this.timeHandler = timeHandler;
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Taken from https://stackoverflow.com/questions/16372241/run-function-on-jframe-close/16372860
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                save();
+                dispose();
+                System.exit(0);
+            }
+        });
+
+
         initializeGraphics();
         this.user = user;
     }
 
-    //test
-    public static void main(String[] args) {
-        new Water4Every1(new User("Elton"));
+    // EFFECTS: saves application to file
+    private void save() {
+        try {
+            writer.open();
+            writer.write(user, timeHandler);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            // TODO: idek what to do here. error?
+        }
     }
 
     // EFFECTS: initializes the main frame and panels of the GUI
@@ -154,7 +182,24 @@ public class Water4Every1 extends JFrame implements ActionListener {
         } else if (button == editBottleButton) {
             new EditBottlePopup(user);
         } else if (button == editScheduleButton) {
-            new EditSchedulePopup();
+            new EditSchedulePopup(user.getSchedule());
+        }
+    }
+
+    // EFFECTS: loads from save, and opens the app. If save doesn't exist, then open TODO: StartPopup??
+    public static void main(String[] args) {
+        reader = new JsonReader("./data/save.json");
+        writer = new JsonWriter("./data/save.json");
+        User user;
+        TimeHandler timeHandler;
+        try {
+            user = reader.readUser();
+            timeHandler = reader.readTimeHandler(user.getSchedule());
+            new Water4Every1(user, timeHandler);
+        } catch (IOException e) {
+            // then file doesnt exist, StartingPopup should open
+            user = new User("Bob");
+            new Water4Every1(user, new TimeHandler(user.getSchedule()));
         }
     }
 }
