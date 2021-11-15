@@ -54,6 +54,7 @@ public class EditBottlePopup implements ActionListener {
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setVisible(true);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
 
         panel = new JPanel();
         frame.add(panel);

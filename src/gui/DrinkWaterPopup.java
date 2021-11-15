@@ -59,6 +59,7 @@ public class DrinkWaterPopup implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
 
         panel = new JPanel();
         frame.add(panel);
