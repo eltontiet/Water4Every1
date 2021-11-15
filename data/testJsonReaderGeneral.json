@@ -1,0 +1,28 @@
+{
+  "timeHandler": {
+    "nextDrinkHour": 18,
+    "nextDrinkMinute": 30
+  },
+  "user": {
+    "schedule": {"times": [
+      {
+        "endHour": 13,
+        "startHour": 12,
+        "startMinute": 0,
+        "endMinute": 0
+      },
+      {
+        "endHour": 18,
+        "startHour": 15,
+        "startMinute": 0,
+        "endMinute": 30
+      }
+    ]},
+    "waterDrank": 500,
+    "name": "guy",
+    "bottle": {
+      "waterLevel": 500,
+      "capacity": 1000
+    }
+  }
+}

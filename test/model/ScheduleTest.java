@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.GoToSleepException;
 import exceptions.NoTimeExistsException;
 import exceptions.TimeOverlapException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ public class ScheduleTest {
         try {
             schedule.addTime(12,0,14,0);
             schedule.addTime(15,0,16,0);
-        } catch (TimeOverlapException e) {
+        } catch (TimeOverlapException | GoToSleepException e) {
             // do nothing
         }
     }
@@ -33,7 +34,7 @@ public class ScheduleTest {
             LocalTime endTime = schedule.getTimes().get(LocalTime.of(10, 0));
             assertEquals(endTime.getHour(), 11);
             assertEquals(endTime.getMinute(), 30);
-        } catch (TimeOverlapException e) {
+        } catch (TimeOverlapException | GoToSleepException e) {
             fail("Should not throw exception");
         }
     }
@@ -48,7 +49,7 @@ public class ScheduleTest {
             assertEquals(endTime.getHour(), 17);
             assertEquals(endTime.getMinute(), 30);
 
-        } catch (TimeOverlapException e) {
+        } catch (TimeOverlapException | GoToSleepException e) {
             fail("Should not throw exception");
         }
     }
@@ -63,7 +64,7 @@ public class ScheduleTest {
             assertEquals(endTime.getHour(), 12);
             assertEquals(endTime.getMinute(), 0);
 
-        } catch (TimeOverlapException e) {
+        } catch (TimeOverlapException | GoToSleepException e) {
             fail("Should not throw exception");
         }
     }
@@ -78,7 +79,7 @@ public class ScheduleTest {
             assertEquals(endTime.getHour(), 15);
             assertEquals(endTime.getMinute(), 0);
 
-        } catch (TimeOverlapException e) {
+        } catch (TimeOverlapException | GoToSleepException e) {
             fail("Should not throw exception");
         }
     }
@@ -92,6 +93,8 @@ public class ScheduleTest {
 
         } catch (TimeOverlapException e) {
             // pass;
+        } catch (GoToSleepException e) {
+            fail("Should throw TimeOverlapException");
         }
     }
 
@@ -104,6 +107,8 @@ public class ScheduleTest {
 
         } catch (TimeOverlapException e) {
             // pass;
+        } catch (GoToSleepException e) {
+            fail("Should throw TimeOverlapException");
         }
     }
 
@@ -116,6 +121,36 @@ public class ScheduleTest {
 
         } catch (TimeOverlapException e) {
             // pass;
+        } catch (GoToSleepException e) {
+            fail("Should throw TimeOverlapException");
+        }
+    }
+
+    @Test
+    void addTimeGoToSleepDifferentHour() {
+        try {
+            schedule.addTime(23,59,0,0);
+
+            fail("Should throw GoToSleepException");
+
+        } catch (TimeOverlapException e) {
+            fail("Should throw GoToSleepException");
+        } catch (GoToSleepException e) {
+            // pass
+        }
+    }
+
+    @Test
+    void addTimeGoToSleepDifferentMinute() {
+        try {
+            schedule.addTime(23,59,23,58);
+
+            fail("Should throw GoToSleepException");
+
+        } catch (TimeOverlapException e) {
+            fail("Should throw GoToSleepException");
+        } catch (GoToSleepException e) {
+            // pass
         }
     }
 

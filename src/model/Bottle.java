@@ -1,6 +1,9 @@
 package model;
 
-public class Bottle {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Bottle implements Writable {
     // how much water can be stored in the bottle (mL)
     private int capacity;
 
@@ -17,6 +20,12 @@ public class Bottle {
 
     //EFFECTS: constructs a full water bottle
     public Bottle(int capacity) {
+        this.capacity = capacity;
+        this.waterLevel = capacity;
+    }
+
+    //EFFECTS: constructs a water bottle at waterLevel
+    public Bottle(int capacity, int waterLevel) {
         this.capacity = capacity;
         this.waterLevel = capacity;
     }
@@ -51,4 +60,12 @@ public class Bottle {
         }
     }
 
+    // EFFECTS: returns a JSONObject that stores this object
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("capacity", capacity);
+        jsonObject.put("waterLevel", waterLevel);
+        return jsonObject;
+    }
 }

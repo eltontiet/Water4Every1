@@ -10,7 +10,7 @@ public class UserTest {
 
     @BeforeEach
     public void setup() {
-        user = new User();
+        user = new User("guy");
         user.editBottle(1400);
     }
 
@@ -32,15 +32,15 @@ public class UserTest {
 
     @Test
     public void setUsernameTest() {
-        user.setUsername("Elton");
-        assertEquals("Elton", user.getUsername());
+        user.setName("Elton");
+        assertEquals("Elton", user.getName());
     }
 
     @Test
     public void changeUserNameTest() {
-        user.setUsername("Elton");
-        user.setUsername("Michelle");
-        assertEquals("Michelle", user.getUsername());
+        user.setName("Elton");
+        user.setName("Michelle");
+        assertEquals("Michelle", user.getName());
     }
 
     @Test
