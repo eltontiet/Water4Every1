@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class Water4Every1 extends JFrame implements ActionListener {
 
@@ -20,9 +21,14 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
     private User user;
     private TimeHandler timeHandler;
+    private Timer timer;
+
+    private LocalDate dateOpened;
 
     private static JsonReader reader;
-    private static JsonWriter writer;
+    private JsonWriter writer;
+
+    private JLabel nextTimeLabel;
 
     private JPanel servicesPanel;
     private JPanel userPanel;
@@ -35,12 +41,16 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private JButton editBottleButton;
     private JButton editScheduleButton;
 
+    private JProgressBar progressBar;
+
     // EFFECTS: constructs the Water4Every1 interactive application
     public Water4Every1(User user, TimeHandler timeHandler) {
         super("Water4Every1");
 
         this.user = user;
         this.timeHandler = timeHandler;
+
+        dateOpened = LocalDate.now();
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Taken from https://stackoverflow.com/questions/16372241/run-function-on-jframe-close/16372860
         addWindowListener(new WindowAdapter() {
@@ -52,13 +62,38 @@ public class Water4Every1 extends JFrame implements ActionListener {
             }
         });
 
+        timer = new Timer(1000, e -> doTick());
+
+        timer.start();
 
         initializeGraphics();
+        doTick();
+    }
+
+    // EFFECTS: updates GUI every second, and checks of time is passed
+    private void doTick() {
+        progressBar.setValue(user.getWaterDrank());
+        timeHandler.updateCurrTime();
+
+        nextTimeLabel.setText(timeHandler.getDifference());
+
+        if (timeHandler.hasPassed()) {
+            new Notification();
+            timeHandler.updateNextDrink();
+        }
+
+        if (LocalDate.now().isAfter(dateOpened)) {
+            user.setWaterDrank(0);
+        }
+
+        validate();
+        repaint();
     }
 
     // EFFECTS: saves application to file
     private void save() {
         try {
+            writer = new JsonWriter("./data/save.json");
             writer.open();
             writer.write(user, timeHandler);
             writer.close();
@@ -99,7 +134,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         userPanel.setLocation(10,0);
         userPanel.setSize(WIDTH,40);
         userPanel.setPreferredSize(new Dimension(WIDTH, 40));
-        JLabel userLabel = new JLabel("Welcome "); //TODO make user name != null exceptions, then add users name to this
+        JLabel userLabel = new JLabel("Welcome " + user.getName()); //TODO make user name != null exceptions, then add users name to this
         userLabel.setFont(FONT_LARGE);
         userPanel.add(userLabel);
         userPanel.setVisible(true);
@@ -112,12 +147,12 @@ public class Water4Every1 extends JFrame implements ActionListener {
         nextTimePanel.setLocation(0, 60);
         nextTimePanel.setSize(WIDTH, 150);
         nextTimePanel.setPreferredSize(new Dimension(WIDTH, 150));
-        JLabel nextTimeTextLabel = new JLabel("Time to Next:");
-//        JLabel nextTimeLabel = new JLabel(); //TODO add the time and then uncomment below
+        JLabel nextTimeTextLabel = new JLabel("Time to Next Drink:");
+        nextTimeLabel = new JLabel(); //TODO add the time and then uncomment below
         nextTimeTextLabel.setFont(FONT_NORM);
-//        nextTimeLabel.setFont(FONT_LARGE);
+        nextTimeLabel.setFont(FONT_LARGE);
         nextTimePanel.add(nextTimeTextLabel);
-//        nextTimePanel.add(nextTimeLabel);
+        nextTimePanel.add(nextTimeLabel);
         nextTimePanel.setVisible(true);
         servicesPanel.add(nextTimePanel);
     }
@@ -131,7 +166,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         progressPanel.setPreferredSize(new Dimension(WIDTH, 50));
         JLabel progressLabel = new JLabel("Progress:");
         progressLabel.setFont(FONT_LARGE);
-        JProgressBar progressBar = new JProgressBar(0);
+        progressBar = new JProgressBar(0,0,4000);
         progressPanel.add(progressLabel);
         progressPanel.add(progressBar);
         progressPanel.setVisible(true);
@@ -181,6 +216,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (button == drinkButton) {
             new DrinkWaterPopup(user);
+            timeHandler.updateNextDrink();
         } else if (button == editBottleButton) {
             new EditBottlePopup(user);
         } else if (button == editScheduleButton) {
@@ -191,17 +227,20 @@ public class Water4Every1 extends JFrame implements ActionListener {
     // EFFECTS: loads from save, and opens the app. If save doesn't exist, then open TODO: StartPopup??
     public static void main(String[] args) {
         reader = new JsonReader("./data/save.json");
-        writer = new JsonWriter("./data/save.json");
         User user;
         TimeHandler timeHandler;
         try {
             user = reader.readUser();
             timeHandler = reader.readTimeHandler(user.getSchedule());
+
+            if (LocalDate.now().isAfter(reader.readLastDate())) {
+                user.setWaterDrank(0);
+            }
+
             new Water4Every1(user, timeHandler);
         } catch (IOException e) {
             // then file doesnt exist, StartingPopup should open
-            user = new User("Bob");
-            new Water4Every1(user, new TimeHandler(user.getSchedule()));
+            new StartupPopup();
         }
     }
 }

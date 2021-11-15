@@ -90,4 +90,29 @@ public class TimeHandler implements Writable {
         }
         return jsonObject;
     }
+
+    // EFFECTS: returns the difference in minutes between nextDrink and CurrTime
+    public String getDifference() {
+        int carry = 0;
+
+        int minutes = nextDrink.getMinute() - currTime.getMinute();
+
+        if (minutes < 0) {
+            carry = 1;
+            minutes += 60;
+        }
+        int hours = (nextDrink.getHour() - currTime.getHour() - carry);
+
+        if (hours < 0) {
+            hours += 24;
+        }
+
+        if (hours == 0) {
+            return minutes + " minutes";
+        } else if (hours == 1) {
+            return  hours + " hour " + minutes + " minutes";
+        }
+
+        return  hours + " hours " + minutes + " minutes";
+    }
 }

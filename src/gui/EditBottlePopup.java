@@ -82,8 +82,9 @@ public class EditBottlePopup implements ActionListener {
         if (e.getSource() == changeButton) {
             Integer i = parseInt(capacityText.getText());
             user.getBottle().changeCapacity(i);
-            panel.removeAll();
-            initialize();
+            frame.invalidate();
+            frame.validate();
+            frame.repaint();
         }
     }
 }
