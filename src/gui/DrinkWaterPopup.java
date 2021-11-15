@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static java.lang.Integer.parseInt;
+
 public class DrinkWaterPopup implements ActionListener {
     private User user;
     private JFrame frame;
@@ -32,7 +34,7 @@ public class DrinkWaterPopup implements ActionListener {
 
     //test
     public static void main(String[] args) {
-        User user = new User();
+        User user = new User("Melissa");
         user.editBottle(1000);
         user.drinkWater(200);
         new DrinkWaterPopup(user);
@@ -42,9 +44,10 @@ public class DrinkWaterPopup implements ActionListener {
         initializeFrameAndPanels();
         initializeWaterDrankLabel();
         initializeAmountInBottleLabel();
-//        initializeAmountToDrinkText();
+        initializeAmountToDrinkText();
         initializeDrinkWaterButton();
         initializeDrinkBottleButton();
+        frame.setVisible(true);
     }
 
     private void initializeFrameAndPanels() {
@@ -55,7 +58,6 @@ public class DrinkWaterPopup implements ActionListener {
         frame.setLayout(layout);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        frame.setVisible(true);
         frame.setResizable(false);
 
         panel = new JPanel();
@@ -80,9 +82,10 @@ public class DrinkWaterPopup implements ActionListener {
     }
 
     private void initializeAmountToDrinkText() {
-        //TODO: figure out why this isn't showing up
-        amountToDrinkText = new JTextField(10);
-        amountToDrinkText.setText("How much water did you drink?");
+        //TODO: add label instead of having text inside the text field
+        //TODO: throw exception? if non-integer is entered
+        amountToDrinkText = new JTextField(20);
+        amountToDrinkText.setText("How much water did you drink (in mL)?");
         amountToDrinkText.setPreferredSize(new Dimension(600, 30));
         amountToDrinkText.setVisible(true);
         panel.add(amountToDrinkText);
@@ -108,12 +111,16 @@ public class DrinkWaterPopup implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == drinkWaterButton) {
-            //TODO: user.drinkWater(amountToDrinkText.getText());
-            //TODO: update display
+            int water = parseInt(amountToDrinkText.getText());
+            user.drinkWater(water);
+
+            panel.removeAll();
+            initialize();
         } else if (e.getSource() == drinkBottleButton) {
             user.drinkWater(user.getBottle().getCapacity());
-            //TODO: update display
-            initializeWaterDrankLabel();
+
+            panel.removeAll();
+            initialize();
         }
     }
 
