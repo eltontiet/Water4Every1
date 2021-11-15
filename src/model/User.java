@@ -28,6 +28,10 @@ public class User implements Writable {
         return waterDrank;
     }
 
+    public Bottle getBottle() {
+        return bottle;
+    }
+
     public void drinkWater(int water) {
         waterDrank += water;
         bottle.drinkWater(water);
@@ -39,6 +43,10 @@ public class User implements Writable {
 
     public void editBottle(int capacity) {
         bottle.changeCapacity(capacity);
+    }
+
+    public void resetWater() {
+        waterDrank = 0;
     }
 
     // MODIFIES: this
