@@ -1,5 +1,7 @@
 package gui;
 
+import model.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +11,11 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
     public static final int WIDTH = 400;
     public static final int HEIGHT = 500;
+    private static final Font FONT_LARGE = new Font(null, Font.PLAIN, 25);
+    private static final Font FONT_NORM = new Font(null, Font.PLAIN, 18);
+
+
+    public User user;
 
     private JPanel servicesPanel;
     private JPanel userPanel;
@@ -22,9 +29,15 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private JButton editScheduleButton;
 
     // EFFECTS: constructs the Water4Every1 interactive application
-    public Water4Every1(){
+    public Water4Every1(User user){
         super("Water4Every1");
         initializeGraphics();
+        this.user = user;
+    }
+
+    //test
+    public static void main(String[] args) {
+        new Water4Every1(new User("Elton"));
     }
 
     // EFFECTS: initializes the main frame and panels of the GUI
@@ -40,9 +53,10 @@ public class Water4Every1 extends JFrame implements ActionListener {
     // EFFECTS: initializes te panels and services within the GUI
     private void displayServicesPanels() {
         servicesPanel = new JPanel();
-        servicesPanel.setLayout(new GridLayout(0,1));
+//        servicesPanel.setLayout(new BoxLayout());
         servicesPanel.setLocation(0,0);
-        servicesPanel.setSize(350,HEIGHT);
+        servicesPanel.setSize(WIDTH,HEIGHT);
+        servicesPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         displayUserPanel();
         displayNextTimePanel();
         displayProgressPanel();
@@ -55,9 +69,11 @@ public class Water4Every1 extends JFrame implements ActionListener {
     // EFFECTS: displays the Welcome "USER_NAME" panel of GUI
     private void displayUserPanel() {
         userPanel = new JPanel();
-        userPanel.setLocation(0,0);
-        userPanel.setSize(WIDTH,50);
-        JLabel userLabel = new JLabel("Welcome "); //TODO add user name
+        userPanel.setLocation(10,0);
+        userPanel.setSize(WIDTH,40);
+        userPanel.setPreferredSize(new Dimension(WIDTH, 40));
+        JLabel userLabel = new JLabel("Welcome "); //TODO make user name != null exceptions, then add users name to this
+        userLabel.setFont(FONT_LARGE);
         userPanel.add(userLabel);
         userPanel.setVisible(true);
         servicesPanel.add(userPanel);
@@ -66,10 +82,13 @@ public class Water4Every1 extends JFrame implements ActionListener {
     // EFFECTS: displays the next reminder time panel of the GUI
     private void displayNextTimePanel() {
         nextTimePanel = new JPanel();
-        nextTimePanel.setLocation(50, 0);
-        nextTimePanel.setSize(WIDTH, 200);
+        nextTimePanel.setLocation(0, 60);
+        nextTimePanel.setSize(WIDTH, 150);
+        nextTimePanel.setPreferredSize(new Dimension(WIDTH, 150));
         JLabel nextTimeTextLabel = new JLabel("Time to Next:");
 //        JLabel nextTimeLabel = new JLabel(); //TODO add the time and then uncomment below
+        nextTimeTextLabel.setFont(FONT_NORM);
+//        nextTimeLabel.setFont(FONT_LARGE);
         nextTimePanel.add(nextTimeTextLabel);
 //        nextTimePanel.add(nextTimeLabel);
         nextTimePanel.setVisible(true);
@@ -78,9 +97,12 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
     private void displayProgressPanel(){
         progressPanel = new JPanel();
-        progressPanel.setLocation(250,0);
+        progressPanel.setLayout(new FlowLayout());
+        progressPanel.setLocation(0,220);
         progressPanel.setSize(WIDTH,50);
+        progressPanel.setPreferredSize(new Dimension(WIDTH, 50));
         JLabel progressLabel = new JLabel("Progress:");
+        progressLabel.setFont(FONT_LARGE);
         JProgressBar progressBar = new JProgressBar(0);
         progressPanel.add(progressLabel);
         progressPanel.add(progressBar);
@@ -90,9 +112,12 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
     private void displayDrinkButtonPanel() {
         drinkButtonPanel = new JPanel();
-        drinkButtonPanel.setLocation(0, 300);
-        drinkButtonPanel.setSize(WIDTH, 300);
+        drinkButtonPanel.setLayout(new GridLayout(1,0));
+        drinkButtonPanel.setLocation(0, 280);
+        drinkButtonPanel.setSize(WIDTH, 100);
+        drinkButtonPanel.setPreferredSize(new Dimension(WIDTH, 100));
         drinkButton = new JButton("Drink");
+        drinkButton.setFont(FONT_NORM);
         drinkButton.addActionListener(this);
 
         drinkButtonPanel.add(drinkButton);
@@ -102,15 +127,18 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private void displayEditServicesPanel() {
         editServicesPanel = new JPanel();
         editServicesPanel.setLayout(new GridLayout(1,0));
-        editServicesPanel.setLocation(0,400);
+        editServicesPanel.setLocation(0,390);
         editServicesPanel.setSize(WIDTH, 100);
+        editServicesPanel.setPreferredSize(new Dimension(WIDTH, 100));
 
         editBottleButton = new JButton("Edit Bottle");
         editBottleButton.addActionListener(this);
+        editBottleButton.setFont(FONT_NORM);
         editServicesPanel.add(editBottleButton);
 
         editScheduleButton = new JButton("Edit Schedule");
         editScheduleButton.addActionListener(this);
+        editScheduleButton.setFont(FONT_NORM);
         editServicesPanel.add(editScheduleButton);
 
         editServicesPanel.setVisible(true);
@@ -122,9 +150,9 @@ public class Water4Every1 extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         if (button == drinkButton) {
-            new DrinkWaterPopup();
+            new DrinkWaterPopup(user);
         } else if (button == editBottleButton) {
-            new EditBottlePopup();
+            new EditBottlePopup(user);
         } else if (button == editScheduleButton) {
             new EditSchedulePopup();
         }
