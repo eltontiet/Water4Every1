@@ -33,7 +33,7 @@ public class JsonWriterTest {
             TimeHandler newTimeHandler = reader.readTimeHandler(user.getSchedule());
 
             assertEquals(user.getName(), "guy");
-            assertNull(newTimeHandler.getNextDrink());
+            assertEquals(newTimeHandler.getNextDrink(),LocalTime.now().plusHours(2));
 
         } catch (IOException e) {
             e.printStackTrace();
