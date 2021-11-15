@@ -6,7 +6,6 @@ import model.TimeHandler;
 import model.User;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalTime;
 
@@ -36,8 +35,6 @@ public class JsonWriterTest {
             assertEquals(user.getName(), "guy");
             assertNull(newTimeHandler.getNextDrink());
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

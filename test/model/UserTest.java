@@ -31,16 +31,16 @@ public class UserTest {
     }
 
     @Test
-    public void setUsernameTest() {
-        user.setUsername("Elton");
-        assertEquals("Elton", user.getUsername());
+    public void setNameTest() {
+        user.setName("Elton");
+        assertEquals("Elton", user.getName());
     }
 
     @Test
     public void changeUserNameTest() {
-        user.setUsername("Elton");
-        user.setUsername("Michelle");
-        assertEquals("Michelle", user.getUsername());
+        user.setName("Elton");
+        user.setName("Michelle");
+        assertEquals("Michelle", user.getName());
     }
 
 
