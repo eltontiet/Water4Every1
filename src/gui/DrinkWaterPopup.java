@@ -109,19 +109,32 @@ public class DrinkWaterPopup implements ActionListener {
         drinkBottleButton.setPreferredSize(BUTTON_DIMENSION);
     }
 
+    private void updateWaterDrankLabel() {
+        waterDrankLabel.setText("Current Amount Drank: " + user.getWaterDrank() + "/4000 mL :D");
+        panel.validate();
+        panel.repaint();
+    }
+
+    private void updateAmountInBottleLabel() {
+        amountInBottleLabel.setText("Current Amount In Bottle: " +
+                user.getBottle().getWaterLevel() + "/" + user.getBottle().getCapacity() + " mL NOICE");
+        panel.validate();
+        panel.repaint();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == drinkWaterButton) {
             int water = parseInt(amountToDrinkText.getText());
             user.drinkWater(water);
 
-            panel.removeAll();
-            initialize();
+            updateWaterDrankLabel();
+            updateAmountInBottleLabel();
+
         } else if (e.getSource() == drinkBottleButton) {
             user.drinkWater(user.getBottle().getCapacity());
 
-            panel.removeAll();
-            initialize();
+            updateWaterDrankLabel();
         }
     }
 
