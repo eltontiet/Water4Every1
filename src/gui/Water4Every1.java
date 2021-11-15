@@ -1,5 +1,6 @@
 package gui;
 
+import model.Schedule;
 import model.User;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
 
     public User user;
+    public Schedule schedule;
 
     private JPanel servicesPanel;
     private JPanel userPanel;
@@ -29,15 +31,16 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private JButton editScheduleButton;
 
     // EFFECTS: constructs the Water4Every1 interactive application
-    public Water4Every1(User user){
+    public Water4Every1(User user, Schedule schedule){
         super("Water4Every1");
         initializeGraphics();
         this.user = user;
+        this.schedule = schedule;
     }
 
     //test
     public static void main(String[] args) {
-        new Water4Every1(new User("Elton"));
+        new Water4Every1(new User("Elton"), new Schedule());
     }
 
     // EFFECTS: initializes the main frame and panels of the GUI
@@ -95,6 +98,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(nextTimePanel);
     }
 
+    //EFFECTS: displays progress panel which contains progress panel of the GUI
     private void displayProgressPanel(){
         progressPanel = new JPanel();
         progressPanel.setLayout(new FlowLayout());
@@ -110,6 +114,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(progressPanel);
     }
 
+    // EFFECTS: displays panel which contains a button for drink
     private void displayDrinkButtonPanel() {
         drinkButtonPanel = new JPanel();
         drinkButtonPanel.setLayout(new GridLayout(1,0));
@@ -124,6 +129,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(drinkButtonPanel);
     }
 
+    // EFFECTS: displays panel which contains button for editing drink and schedule
     private void displayEditServicesPanel() {
         editServicesPanel = new JPanel();
         editServicesPanel.setLayout(new GridLayout(1,0));
@@ -145,7 +151,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         servicesPanel.add(editServicesPanel);
     }
 
-
+    // EFFECTS: buttons
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
@@ -154,7 +160,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         } else if (button == editBottleButton) {
             new EditBottlePopup(user);
         } else if (button == editScheduleButton) {
-            new EditSchedulePopup();
+            new EditSchedulePopup(schedule);
         }
     }
 }
