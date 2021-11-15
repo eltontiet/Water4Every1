@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.stream.Stream;
 
@@ -55,7 +56,8 @@ public class JsonReader {
             int minute = jsonObject.getInt("nextDrinkMinute");
             timeHandler.setNextDrink(LocalTime.of(hour, minute));
         } catch (JSONException e) {
-            // do nothing
+            timeHandler.updateCurrTime();
+            timeHandler.updateNextDrink();
         }
 
         return timeHandler;
@@ -111,5 +113,12 @@ public class JsonReader {
         int capacity = jsonObject.getInt("capacity");
         int waterLevel = jsonObject.getInt("waterLevel");
         return new Bottle(capacity,waterLevel);
+    }
+
+    // EFFECTS: reads last date opened
+    public LocalDate readLastDate() throws IOException {
+        String jsonData = readFile();
+        JSONObject jsonObject = new JSONObject(jsonData);
+        return LocalDate.parse(jsonObject.getString("lastDate"));
     }
 }

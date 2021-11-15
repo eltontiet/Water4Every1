@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class Water4Every1 extends JFrame implements ActionListener {
 
@@ -20,9 +21,14 @@ public class Water4Every1 extends JFrame implements ActionListener {
 
     private User user;
     private TimeHandler timeHandler;
+    private Timer timer;
+
+    private static LocalDate dateOpened;
 
     private static JsonReader reader;
     private static JsonWriter writer;
+
+    private JLabel nextTimeLabel;
 
     private JPanel servicesPanel;
     private JPanel userPanel;
@@ -34,6 +40,8 @@ public class Water4Every1 extends JFrame implements ActionListener {
     private JButton drinkButton;
     private JButton editBottleButton;
     private JButton editScheduleButton;
+
+    private JProgressBar progressBar;
 
     // EFFECTS: constructs the Water4Every1 interactive application
     public Water4Every1(User user, TimeHandler timeHandler) {
@@ -52,8 +60,31 @@ public class Water4Every1 extends JFrame implements ActionListener {
             }
         });
 
+        timer = new Timer(1000, e -> doTick());
+
+        timer.start();
 
         initializeGraphics();
+        doTick();
+    }
+
+    // EFFECTS: updates GUI every second, and checks of time is passed
+    private void doTick() {
+        progressBar.setValue(user.getWaterDrank());
+        timeHandler.updateCurrTime();
+
+        nextTimeLabel.setText(timeHandler.getDifference());
+
+        if (timeHandler.hasPassed()) {
+            new Notification();
+        }
+
+        if (LocalDate.now().isAfter(dateOpened)) {
+            user.setWaterDrank(0);
+        }
+
+        validate();
+        repaint();
     }
 
     // EFFECTS: saves application to file
@@ -113,11 +144,11 @@ public class Water4Every1 extends JFrame implements ActionListener {
         nextTimePanel.setSize(WIDTH, 150);
         nextTimePanel.setPreferredSize(new Dimension(WIDTH, 150));
         JLabel nextTimeTextLabel = new JLabel("Time to Next:");
-//        JLabel nextTimeLabel = new JLabel(); //TODO add the time and then uncomment below
+        nextTimeLabel = new JLabel(); //TODO add the time and then uncomment below
         nextTimeTextLabel.setFont(FONT_NORM);
-//        nextTimeLabel.setFont(FONT_LARGE);
+        nextTimeLabel.setFont(FONT_LARGE);
         nextTimePanel.add(nextTimeTextLabel);
-//        nextTimePanel.add(nextTimeLabel);
+        nextTimePanel.add(nextTimeLabel);
         nextTimePanel.setVisible(true);
         servicesPanel.add(nextTimePanel);
     }
@@ -131,7 +162,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         progressPanel.setPreferredSize(new Dimension(WIDTH, 50));
         JLabel progressLabel = new JLabel("Progress:");
         progressLabel.setFont(FONT_LARGE);
-        JProgressBar progressBar = new JProgressBar(0);
+        progressBar = new JProgressBar(0,0,4000);
         progressPanel.add(progressLabel);
         progressPanel.add(progressBar);
         progressPanel.setVisible(true);
@@ -181,6 +212,7 @@ public class Water4Every1 extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (button == drinkButton) {
             new DrinkWaterPopup(user);
+            timeHandler.updateNextDrink();
         } else if (button == editBottleButton) {
             new EditBottlePopup(user);
         } else if (button == editScheduleButton) {
@@ -197,11 +229,18 @@ public class Water4Every1 extends JFrame implements ActionListener {
         try {
             user = reader.readUser();
             timeHandler = reader.readTimeHandler(user.getSchedule());
+
+            if (LocalDate.now().isAfter(reader.readLastDate())) {
+                user.setWaterDrank(0);
+            }
+
+            dateOpened = LocalDate.now();
+
+
             new Water4Every1(user, timeHandler);
         } catch (IOException e) {
             // then file doesnt exist, StartingPopup should open
-            user = new User("Bob");
-            new Water4Every1(user, new TimeHandler(user.getSchedule()));
+            new StartupPopup();
         }
     }
 }

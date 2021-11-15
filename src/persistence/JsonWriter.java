@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 
 // Represents a writer that writes json data into a file
 public class JsonWriter {
@@ -42,6 +43,7 @@ public class JsonWriter {
         JSONObject json = new JSONObject();
         json.put("user",user.toJson());
         json.put("timeHandler", timeHandler.toJson());
+        json.put("lastDate", LocalDate.now());
         saveToFile(json.toString(TAB));
     }
 }
