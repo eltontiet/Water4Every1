@@ -77,8 +77,12 @@ public class StartupPopup extends JFrame implements ActionListener {
             String name = nameText.getText();
             Integer i = parseInt(bottleSizeText.getText());
             Schedule schedule = new Schedule();
+            TimeHandler timeHandler = new TimeHandler(schedule);
 
-            new Water4Every1(new User(name, new Bottle(i), schedule), new TimeHandler(schedule));
+            timeHandler.updateCurrTime();
+            timeHandler.updateNextDrink();
+
+            new Water4Every1(new User(name, new Bottle(i), schedule), timeHandler);
 
             setVisible(false);
             dispose();
